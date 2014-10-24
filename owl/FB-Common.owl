@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE uridef[
+  <!ENTITY xsd       "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf       "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs      "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY owl       "http://www.w3.org/2002/07/owl">
+  <!ENTITY foaf      "http://xmlns.com/foaf/0.1/"> 
+  <!ENTITY actor     "http://www.daml.org/services/owl-s/1.2/ActorDefault.owl">
+  <!ENTITY grounding "http://www.daml.org/services/owl-s/1.2/Grounding.owl"> 
+  <!ENTITY process   "http://www.daml.org/services/owl-s/1.2/Process.owl">
+  <!ENTITY restful   "https://sites.google.com/site/owlsrestful/RESTfulGrounding.owl"> 
+  <!ENTITY wadl      "https://sites.google.com/site/owlsrestful/Facebook.wadl">
+  <!ENTITY DEFAULT   "https://sites.google.com/site/owlsrestful/FB-Common.owl">
+]>
+
+<rdf:RDF
+  xmlns:rdf       ="&rdf;#"
+  xmlns:rdfs      ="&rdfs;#"
+  xmlns:owl       ="&owl;#"
+  xmlns:foaf      ="&foaf;#"
+  xmlns:actor     ="&actor;#"
+  xmlns:process   ="&process;#"
+  xmlns:restful   ="&restful;#"
+  xmlns:grounding ="&grounding;#"
+  xmlns:wadl      ="&wadl;#"
+  xmlns           ="&DEFAULT;#"
+  xml:base        ="&DEFAULT;"
+>
+
+<!-- Ontology -->
+
+<owl:Ontology rdf:about="">
+  <rdfs:comment> 
+    This ontology provides some common elements to Facebook Services
+  </rdfs:comment>
+  <owl:imports rdf:resource="&foaf;"/>
+</owl:Ontology>
+
+<owl:Class rdf:ID="FBUser">
+  <rdfs:subClassOf rdf:resource="&foaf;Person"/>
+</owl:Class>
+<owl:Class rdf:ID="FBFail" />
+
+<actor:Actor rdf:ID="FBContact">
+  <actor:name>Facebook, Inc.</actor:name>
+  <actor:title>Copyright Agent</actor:title>
+  <actor:phone>650-543-4800</actor:phone>
+  <actor:fax>650-543-4801</actor:fax>
+  <actor:physicalAddress>Palo Alto, CA 94301-1605 United States</actor:physicalAddress>
+  <actor:webURL>http://www.facebook.com/facebook</actor:webURL>
+</actor:Actor>
+
+<process:Input rdf:ID="FBAccessToken">
+  <process:parameterType rdf:datatype="&xsd;#anyURI">&xsd;#ID</process:parameterType>
+</process:Input>
+
+<process:Input rdf:ID="FBUserId">
+  <process:parameterType rdf:datatype="&xsd;#anyURI">&xsd;#string</process:parameterType>
+</process:Input>
+
+<process:Output rdf:ID="FBFailOut">
+  <process:parameterType rdf:datatype="&xsd;#anyURI">#FBFail</process:parameterType>
+</process:Output>
+
+<restful:WadlRequestParamMap rdf:ID="FBWadlAccessToken">
+  <grounding:owlsParameter rdf:resource="#FBAccessToken"/>
+  <restful:wadlMessageParam rdf:datatype="&xsd;#anyURI">&wadl;#tokenParam</restful:wadlMessageParam>
+</restful:WadlRequestParamMap>
+
+<restful:WadlRequestParamMap rdf:ID="FBWadlUserId">
+  <grounding:owlsParameter rdf:resource="#FBUserId"/>
+  <restful:wadlMessageParam rdf:datatype="&xsd;#anyURI">&wadl;#userIdParam</restful:wadlMessageParam>
+</restful:WadlRequestParamMap>
+
+<restful:WadlResponseParamMap rdf:ID="FBResponseFail">
+  <grounding:owlsParameter rdf:resource="#FBFailOut"/>
+  <restful:wadlMessageParam rdf:datatype="&xsd;#anyURI">&wadl;#failRep</restful:wadlMessageParam>
+</restful:WadlResponseParamMap>
+
+</rdf:RDF>

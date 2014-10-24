@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE uridef[
+  <!ENTITY xsd       "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY rdf       "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs      "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY owl       "http://www.w3.org/2002/07/owl">
+  <!ENTITY service   "http://www.daml.org/services/owl-s/1.2/Service.owl">
+  <!ENTITY profile   "http://www.daml.org/services/owl-s/1.2/Profile.owl">
+  <!ENTITY process   "http://www.daml.org/services/owl-s/1.2/Process.owl">
+  <!ENTITY restful   "https://sites.google.com/site/owlsrestful/RESTfulGrounding.owl"> 
+  <!ENTITY grounding "http://www.daml.org/services/owl-s/1.2/Grounding.owl"> 
+  <!ENTITY fb        "https://sites.google.com/site/owlsrestful/FB-Common.owl">
+  <!ENTITY wadl      "https://sites.google.com/site/owlsrestful/Facebook.wadl">
+  <!ENTITY DEFAULT   "https://sites.google.com/site/owlsrestful/FB-Service.owl">
+]>
+
+<rdf:RDF
+  xmlns:rdf       ="&rdf;#"
+  xmlns:rdfs      ="&rdfs;#"
+  xmlns:owl       ="&owl;#"
+  xmlns:service   ="&service;#"
+  xmlns:profile   ="&profile;#"
+  xmlns:process   ="&process;#"
+  xmlns:grounding ="&grounding;#"
+  xmlns:restful   ="&restful;#"
+  xmlns:wadl      ="&wadl;#"
+  xmlns           ="&DEFAULT;#"
+  xml:base        ="&DEFAULT;"
+>
+
+<!-- Ontology -->
+<owl:Ontology rdf:about="">
+  <rdfs:comment> 
+    This ontology represents the OWL-S service description for Facebook User Resource
+  </rdfs:comment>
+  <owl:imports rdf:resource="&service;"/>
+  <owl:imports rdf:resource="&profile;"/>
+  <owl:imports rdf:resource="&process;"/>
+  <owl:imports rdf:resource="&restful;"/>
+  <owl:imports rdf:resource="&fb;"/>
+</owl:Ontology>
+
+<service:Service rdf:ID="FBUserResource">
+  <service:presents rdf:resource="#FBUserProfile"/>
+  <service:describedBy rdf:resource="#FBUserAtomicProcess"/>
+  <service:supports rdf:resource="#FBUserGrounding"/>
+</service:Service> 
+
+<!-- Inverse links -->
+<profile:Profile rdf:about="#FBUserProfile">
+  <service:presentedBy rdf:resource="#FBUserResource"/>
+</profile:Profile>
+<process:AtomicProcess rdf:about="#FBUserAtomicProcess">
+  <service:describes rdf:resource="#FBUserResource"/>
+</process:AtomicProcess>
+<restful:WadlGrounding rdf:about="#FBUserGrounding">
+  <service:supportedBy rdf:resource="#FBUserResource"/>
+</restful:WadlGrounding>
+
+<profile:Profile rdf:ID="FBUserProfile">
+  <profile:has_process rdf:resource="#FBUserProcess"/>
+  <profile:serviceName>Facebook Graph API - User Resource</profile:serviceName>
+  <profile:textDescription>
+    This service provides a representation of a Facebook User.
+  </profile:textDescription>
+  <profile:contactInformation rdf:resource="&fb;#FBContact" />
+  <profile:hasInput rdf:resource="&fb;#FBAccessToken"/>
+  <profile:hasInput rdf:resource="&fb;#FBUserId"/>
+  <profile:hasOutput rdf:resource="#FBUserOut"/>
+</profile:Profile>
+
+<process:AtomicProcess rdf:ID="FBUserAtomicProcess">
+  <!-- Input Parameters -->
+  <process:hasInput rdf:resource="&fb;#FBAccessToken"/>
+  <process:hasInput rdf:resource="&fb;#FBUserId"/>
+  <!-- Output Parameters -->
+  <process:hasOutput> 
+    <process:Output rdf:ID="FBUserOut">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&fb;#FBUser</process:parameterType>
+    </process:Output>
+  </process:hasOutput>
+</process:AtomicProcess>
+
+<!-- WADL Grounding -->
+<restful:WadlGrounding rdf:ID="FBUserGrounding">
+  <grounding:hasAtomicProcessGrounding rdf:resource="#FBUserAtomicProcessGrounding"/>
+</restful:WadlGrounding>
+<!-- WADL Atomic Process Grounding -->
+<restful:WadlAtomicProcessGrounding rdf:ID="FBUserAtomicProcessGrounding">
+  <grounding:owlsProcess rdf:resource="#FBUserAtomicProcess"/>
+  <restful:wadlResourceMethod>
+    <restful:WadlResourceMethodRef>
+      <restful:resource rdf:datatype="&xsd;#anyURI">&wadl;#user</restful:resource>
+      <restful:method rdf:datatype="&xsd;#anyURI">&wadl;#getuser</restful:method>
+    </restful:WadlResourceMethodRef>
+  </restful:wadlResourceMethod>
+  <restful:wadlVersion rdf:datatype="&xsd;#anyURI">
+    https://wadl.dev.java.net/wadl20090202.xsd
+  </restful:wadlVersion>
+  <restful:wadlDocument rdf:datatype="&xsd;#anyURI">
+    https://sites.google.com/site/owlsrestful/Facebook.wadl
+  </restful:wadlDocument>
+
+  <!-- Request Parameters -->
+  <restful:wadlRequestParam rdf:resource="&fb;#FBWadlAccessToken" />
+  <restful:wadlRequestParam rdf:resource="&fb;#FBWadlUserId"/>
+  <!-- Response Parameters -->
+  <restful:wadlResponseParam>
+    <restful:WadlResponseParamMap>
+      <grounding:owlsParameter rdf:resource="#FBUserOut"/>
+      <restful:wadlMessageParam rdf:datatype="&xsd;#anyURI">&wadl;#userRep</restful:wadlMessageParam>
+      <restful:transformationFile>
+        <restful:TransformationFileMap>
+          <restful:transformationURI rdf:datatype="&xsd;#anyURI">
+            https://sites.google.com/site/owlsrestful/facebookToFoaf.xslt
+          </restful:transformationURI>
+          <restful:transformationMediaType rdf:datatype="&xsd;#string">
+            application/xslt+xml
+          </restful:transformationMediaType>
+        </restful:TransformationFileMap>
+      </restful:transformationFile>
+    </restful:WadlResponseParamMap>
+  </restful:wadlResponseParam>
+  <restful:wadlResponseParam rdf:resource="&fb;#FBResponseFail" />
+</restful:WadlAtomicProcessGrounding>
+</rdf:RDF>

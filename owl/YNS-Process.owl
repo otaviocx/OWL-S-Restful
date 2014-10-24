@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE uridef[
+  <!ENTITY rdf     "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs    "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY owl     "http://www.w3.org/2002/07/owl">
+  <!ENTITY xsd     "http://www.w3.org/2001/XMLSchema">
+  <!ENTITY process "http://www.daml.org/services/owl-s/1.2/Process.owl">
+  <!ENTITY DEFAULT "https://sites.google.com/site/owlsrestful/YNS-Process.owl">
+  <!ENTITY THIS    "https://sites.google.com/site/owlsrestful/YNS-Process.owl">
+]>
+
+<rdf:RDF
+  xmlns:rdf    ="&rdf;#"
+  xmlns:rdfs   ="&rdfs;#"
+  xmlns:owl    ="&owl;#"
+  xmlns:xsd    ="&xsd;#"
+  xmlns:process="&process;#"
+  xmlns        ="&DEFAULT;#"
+  xml:base     ="&DEFAULT;"
+>
+
+<!-- Ontology -->
+
+<owl:Ontology rdf:about="">
+  <rdfs:comment> 
+    This ontology represents the OWL-S service process description for Yahoo’s News Search Web Service.
+  </rdfs:comment>
+  <owl:imports rdf:resource="&process;"/>
+</owl:Ontology>
+
+<!-- Basic Data Types -->
+
+<owl:Class rdf:ID="YNS-Type-Opt">
+  <owl:oneOf rdf:parseType="Collection">
+    <YNS-Type-Opt rdf:ID="all"/>
+    <YNS-Type-Opt rdf:ID="any"/>
+    <YNS-Type-Opt rdf:ID="phrase"/>
+  </owl:oneOf>
+</owl:Class>
+
+<owl:Class rdf:ID="YNS-Sort-Opt">
+  <owl:oneOf rdf:parseType="Collection">
+    <YNS-Sort-Opt rdf:ID="rank"/>
+    <YNS-Sort-Opt rdf:ID="date"/>
+  </owl:oneOf>
+</owl:Class>
+
+<owl:Class rdf:ID="YNS-Language-Opt">
+  <rdfs:comment> 
+    Yahoo’s News Search Web Service supports 37 languages, 
+    although only 5 of them have been listed here for the sake 
+    of brevity, namely English, Spanish, French, Italian, and Portuguese.
+  </rdfs:comment>
+  <owl:oneOf rdf:parseType="Collection">
+    <YNS-Language-Opt rdf:ID="en"/>
+    <YNS-Language-Opt rdf:ID="es"/>
+    <YNS-Language-Opt rdf:ID="fr"/>
+    <YNS-Language-Opt rdf:ID="it"/>
+    <YNS-Language-Opt rdf:ID="pt"/>
+  </owl:oneOf>
+</owl:Class> 
+
+<owl:Class rdf:ID="YNS-Output-Type" />
+<owl:Class rdf:ID="YNS-Notification-Success">
+  <rdfs:subClassOf rdf:resource="YNS-Output-Type"/>
+</owl:Class>
+<owl:Class rdf:ID="YNS-Notification-Failure">
+  <rdfs:subClassOf rdf:resource="YNS-Output-Type"/>
+</owl:Class>
+
+<owl:DatatypeProperty rdf:about="#totalResultsAvailable">
+  <rdfs:domain rdf:resource="#YNS-Output-Type"/>
+  <rdfs:range rdf:resource="&xsd;integer"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#totalResultsReturned">
+  <rdfs:domain rdf:resource="#YNS-Output-Type"/>
+  <rdfs:range rdf:resource="&xsd;integer"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#firstResultPosition">
+  <rdfs:domain rdf:resource="#YNS-Output-Type"/>
+  <rdfs:range rdf:resource="&xsd;integer"/>
+</owl:DatatypeProperty>
+<owl:ObjectProperty rdf:ID="Result">
+  <rdfs:domain rdf:resource="#YNS-Output-Type"/>
+  <rdfs:range rdf:resource="#ResultType"/>
+</owl:ObjectProperty>
+
+<owl:DatatypeProperty rdf:about="#Title">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#Summary">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#Url">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#ClickUrl">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#NewsSource">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#NewsSourceUrl">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#Language">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#PublishDate">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#ModificationDate">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:ObjectProperty rdf:ID="Thumbnail">
+  <rdfs:domain rdf:resource="#ResultType"/>
+  <rdfs:range rdf:resource="#ImageType"/>
+</owl:ObjectProperty>
+
+
+<owl:DatatypeProperty rdf:about="#Url">
+  <rdfs:domain rdf:resource="#ImageType"/>
+  <rdfs:range rdf:resource="&xsd;string"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#Height">
+  <rdfs:domain rdf:resource="#ImageType"/>
+  <rdfs:range rdf:resource="&xsd;integer"/>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="#Width">
+  <rdfs:domain rdf:resource="#ImageType"/>
+  <rdfs:range rdf:resource="&xsd;integer"/>
+</owl:DatatypeProperty>
+
+
+
+
+<!-- Atomic Process -->
+
+<process:AtomicProcess rdf:ID="YNS-AtomicProcess">
+
+  <!-- Input Parameters -->
+
+  <process:hasInput>
+    <process:Input rdf:ID="YNS-AppID">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&xsd;#ID</process:parameterType>
+    </process:Input>
+  </process:hasInput>
+  <process:hasInput>
+    <process:Input rdf:ID="YNS-Query">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&xsd;#string</process:parameterType>
+    </process:Input>
+  </process:hasInput>
+  <process:hasInput>
+    <process:Input rdf:ID="YNS-Type">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&THIS;#YNS-Type-Opt</process:parameterType>
+    </process:Input>
+  </process:hasInput>
+  <process:hasInput>
+    <process:Input rdf:ID="YNS-Results">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&xsd;#positiveInteger</process:parameterType>
+    </process:Input>
+  </process:hasInput>
+  <process:hasInput>
+    <process:Input rdf:ID="YNS-Start">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&xsd;#positiveInteger</process:parameterType>
+    </process:Input>
+  </process:hasInput>
+  <process:hasInput>
+    <process:Input rdf:ID="YNS-Sort">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&THIS;#YNS-Sort-Opt</process:parameterType>
+    </process:Input>
+  </process:hasInput>
+  <process:hasInput>
+    <process:Input rdf:ID="YNS-Language">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&THIS;#YNS-Language-Opt</process:parameterType>
+    </process:Input>
+  </process:hasInput>
+
+  <!-- Output Parameters -->
+
+  <process:hasOutput> 
+    <process:Output rdf:ID="YNS-Output">
+      <process:parameterType rdf:datatype="&xsd;#anyURI">&THIS;#YNS-Output-Type</process:parameterType>
+    </process:Output>
+  </process:hasOutput>
+</process:AtomicProcess>
+</rdf:RDF>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application 
+	xsi:schemaLocation="http://wadl.dev.java.net/2009/02 wadl.xsd"
+	xmlns="http://wadl.dev.java.net/2009/02" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<param id="tokenParam" name="access_token" style="query" type="xsd:string" />
+	<param id="userIdParam" name="user" required="true" type="xsd:string"
+		style="template" default="otaviocx">
+		<doc>Represents the ID of the user object.</doc>
+	</param>
+	
+	<representation mediaType="application/json" id="failRep" />
+
+	<resources base="https://graph.facebook.com">
+		<resource id="user" path="{user}">
+			<param href="#tokenParam" />
+			<param href="#userIdParam" />
+			<method id="getuser" name="GET">
+				<doc xmlns:apigee="http://api.apigee.com/wadl/2010/07/" title=""
+					apigee:url="http://developers.facebook.com/docs/reference/api/user">
+                    <![CDATA[A user profile.]]></doc>
+                    
+				<request>
+					<param name="metadata" required="false" type="xsd:string"
+						style="query" default="0">
+						<doc>The Graph API supports introspection of objects, which
+							enables you to see all of the connections an object has without
+							knowing its type ahead of time.
+						</doc>
+					</param>
+				</request>
+				
+				<response status="200">
+					<representation mediaType="application/json" id="userRep" />
+				</response>
+				<response status="400">
+					<representation href="#failRep" />
+				</response>
+			</method>
+		</resource>
+	</resources>
+</application>
